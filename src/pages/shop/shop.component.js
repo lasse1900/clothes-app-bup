@@ -25,7 +25,13 @@ class ShopPage extends React.Component {
     const { updateCollections } = this.props;
     const collectionRef = firestore.collection('collections');
 
-    collectionRef.onSnapshot(async snapshot => {
+    // fetch(
+    //   'https://firestore.googleapis.com/v1/projects/crwn-db-dd6cb/databases/(default)/documents/collections')
+    //   .then(response => response.json())
+    //   .then(collections => console.log(collections));
+    // Needs to be handled and stored into map
+
+    collectionRef.get().then(snapshot => {
       const collectionsMap = convertCollectionsSnapshotToMap(snapshot);
       updateCollections(collectionsMap);
       this.setState({ loading: false });
@@ -38,7 +44,7 @@ class ShopPage extends React.Component {
     return (
       <div className='shop-page'>
         <Route exact path={`${match.path}`} render={(props) => <CollectionOverviewWithSpinner isLoading={loading} {...props} />} />
-        <Route path={`${match.path}/:collectionId`}  render={(props) => <CollectionPageWithSpinner isLoading={loading} {...props} />} />
+        <Route path={`${match.path}/:collectionId`} render={(props) => <CollectionPageWithSpinner isLoading={loading} {...props} />} />
       </div>
     );
   }
